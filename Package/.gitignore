@@ -1,0 +1,9 @@
+# Ignore everything
+*.deb
+*.tar.gz
+
+# But not these files...
+!.gitignore
+!*.proj
+!/deb/**/*
+

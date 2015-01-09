@@ -31,10 +31,39 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging">
+      <HintPath>..\packages\Common.Logging.2.3.1\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz">
+      <HintPath>..\packages\Quartz.2.3\lib\net40\Quartz.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FileProcessor\FileMover.cs" />
+    <Compile Include="FileProcessor\FileProcessor.cs" />
+    <Compile Include="FileProcessor\IFilePostProcessor.cs" />
+    <Compile Include="FileProcessor\IFileProcessor.cs" />
+    <Compile Include="Jobs\CleanJob.cs" />
+    <Compile Include="Jobs\FileCleaner.cs" />
+    <Compile Include="Jobs\FileProcessingJob.cs" />
+    <Compile Include="Service.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="FileProcessor\" />
+    <Folder Include="Jobs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+    <None Include="job_scheduling_data_2_0.xsd" />
+  </ItemGroup>
 </Project>

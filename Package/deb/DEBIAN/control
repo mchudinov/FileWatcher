@@ -1,0 +1,7 @@
+Package:smartsmsparser
+Version:{xxx}
+Maintainer:Mikael Chudinov <mikael.chudinov@datametrix.no>
+Architecture:amd64
+Section:net
+Description:Parser for emails with SMS.
+Depends:mono-complete (>=3)

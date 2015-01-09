@@ -1,0 +1,9 @@
+/home/mikael/projects/FileWatcher/FileWatcher/obj/x86/Release/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/mikael/projects/FileWatcher/FileWatcher/bin/Release/log4net.dll
+/home/mikael/projects/FileWatcher/FileWatcher/bin/Release/Common.Logging.dll
+/home/mikael/projects/FileWatcher/FileWatcher/bin/Release/Quartz.dll
+/home/mikael/projects/FileWatcher/FileWatcher/bin/Release/FileWatcher.exe.config
+/home/mikael/projects/FileWatcher/FileWatcher/bin/Release/FileWatcher.exe.mdb
+/home/mikael/projects/FileWatcher/FileWatcher/bin/Release/FileWatcher.exe
+/home/mikael/projects/FileWatcher/FileWatcher/obj/x86/Release/FileWatcher.exe
+/home/mikael/projects/FileWatcher/FileWatcher/obj/x86/Release/FileWatcher.exe.mdb
