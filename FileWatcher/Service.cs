@@ -146,8 +146,8 @@ namespace FileWatcher
         // How to: Debug Windows Service Applications http://msdn.microsoft.com/en-us/library/7a50syb3%28v=vs.110%29.aspx
         public static void Main(String[] args)
         {      
-            (new SmartSMSParser.Service()).OnStart(new string[1]);
-            ServiceBase.Run( new SmartSMSParser.Service() );
+            (new FileWatcher.Service()).OnStart(new string[1]);
+            ServiceBase.Run( new FileWatcher.Service() );
         }
         #endif
     }
