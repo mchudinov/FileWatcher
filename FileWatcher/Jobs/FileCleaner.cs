@@ -14,10 +14,17 @@ namespace FileWatcher.Jobs
         {
             DateTime expireDate = DateTime.Now.AddDays(-days);
 
-            var fileInfos = new DirectoryInfo(folder).GetFiles("*", SearchOption.AllDirectories)
-                .Where(fi => fi.CreationTime < expireDate);
+            try
+            {
+                var fileInfos = new DirectoryInfo(folder).GetFiles("*", SearchOption.AllDirectories)
+                    .Where(fi => fi.CreationTime < expireDate);
 
-            fileInfos.All(fi => {CleanInternal(fi.FullName); return true;});
+                fileInfos.All(fi => {CleanInternal(fi.FullName); return true;});    
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error cleaning files: "+  ex.Message);
+            }
         }
 
         void CleanInternal(string filename)
