@@ -3,7 +3,7 @@
 # Demon start/stop script
 # ---------------------------------------------------------------------
 
-PROGRAM_NAME="SmartSMSParser"
+PROGRAM_NAME="FileWatcher"
 LOCK_FILE="/tmp/"${PROGRAM_NAME}".lock"
 
 usage()
@@ -31,6 +31,7 @@ stop()
 
 start()
 {
+    cd /opt/${PROGRAM_NAME}
     mono-service -l:${LOCK_FILE} /opt/${PROGRAM_NAME}/${PROGRAM_NAME}.exe
 }
 
