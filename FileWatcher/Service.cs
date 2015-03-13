@@ -19,17 +19,6 @@ namespace FileWatcher
 
         public Service() 
         {
-            FileProcessor = new FileProcessor.FileProcessor();
-            _scheduler = new FileWatcher.Scheduler();
-            _fileSystemWatcher = new FileWatcher.FileSystemWatcher();
-        }
-
-        protected override void OnStart(string[] args)
-        {
-            log.Info("Service starting");
-            bool development = (args.Length > 0 && null !=args[0] && (args[0].ToLower().Equals("dev") || args[0].ToLower().Equals("devel")));
-            log.InfoFormat("Developement mode is {0}",development?"On":"Off");
-
             FolderWatcherRoot = ConfigurationManager.AppSettings["FolderWatcherRoot"];
             if (!Directory.Exists(FolderWatcherRoot))
             {
@@ -38,12 +27,14 @@ namespace FileWatcher
                 Stop();
             }
 
-            UriApi = new Uri(ConfigurationManager.AppSettings["UriProd"]);
-            if (development) {
-                UriApi = new Uri(ConfigurationManager.AppSettings["UriDevel"]);
-            }
-            log.InfoFormat("Api url {0}",UriApi.ToString());
+            FileProcessor = new FileProcessor.FileProcessor();
+            _scheduler = new FileWatcher.Scheduler();
+            _fileSystemWatcher = new FileWatcher.FileSystemWatcher();
+        }
 
+        protected override void OnStart(string[] args)
+        {
+            log.Info("Service starting");
             _fileSystemWatcher.Start(FolderWatcherRoot);
             _scheduler.Start();
         }

@@ -18,11 +18,8 @@ namespace FileWatcher.FileProcessor
         public void Process(dynamic parameters)
         {
             string filename = (string)parameters.FileName;
-            Uri url = (Uri)parameters.Uri;
-
-            PostProcessor.Process(filename);
-
             log.InfoFormat("Process file: {0}", filename);
+            PostProcessor.Process(filename);
         }
     }
 }

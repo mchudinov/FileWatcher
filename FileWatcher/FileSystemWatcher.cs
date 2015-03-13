@@ -56,7 +56,7 @@ namespace FileWatcher
             }
             catch (System.Exception ex)
             {
-                log.Error("FileSystemWatcher error. Folder:{0} Message: {1}", folderRoot, ex.Message);
+                log.ErrorFormat("FileSystemWatcher error. Folder:{0} Message: {1}", folderRoot, ex.Message);
             }
         }
     }

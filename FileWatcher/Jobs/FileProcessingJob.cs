@@ -39,7 +39,7 @@ namespace FileWatcher.Jobs
         void ExecuteInternal(string filename)
         {
             log.DebugFormat("FileProcessingJob.FileProcessing file {0}", filename);
-            FileProcessor.Process(new {FileName = filename, Uri = UriApi});
+            FileProcessor.Process(new {FileName = filename});
         }
     }
 }
