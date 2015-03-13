@@ -1,27 +1,28 @@
 ﻿using System;
 using log4net;
 using System.ServiceProcess;
-using Quartz;
-using Quartz.Impl;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
-using System.Threading;
 using FileWatcher.FileProcessor;
 
 namespace FileWatcher
 {
     public class Service : ServiceBase
     {
-        public static readonly IFileProcessor FileProcessor = BuildFileProcessor(); 
         static readonly ILog log = LogManager.GetLogger(typeof(FileWatcher.Service));
-        static IScheduler Scheduler { get; set; }
-        static FileSystemWatcher FileSystemWatcher { get; set;}
         public static Uri UriApi { get; private set; }
         public static string FolderWatcherRoot  { get; private set;}
+        FileWatcher.Scheduler _scheduler;
+        FileWatcher.FileSystemWatcher _fileSystemWatcher;
+        public static IFileProcessor FileProcessor {get; private set;}
 
-        public Service() {}
+        public Service() 
+        {
+            FileProcessor = new FileProcessor.FileProcessor();
+            _scheduler = new FileWatcher.Scheduler();
+            _fileSystemWatcher = new FileWatcher.FileSystemWatcher();
+        }
 
         protected override void OnStart(string[] args)
         {
@@ -43,99 +44,15 @@ namespace FileWatcher
             }
             log.InfoFormat("Api url {0}",UriApi.ToString());
 
-            StartFileSystemWatcher(FolderWatcherRoot);
-            StartScheduler();
-            StartCleanJob();
-            StartFileProcessingJob();
+            _fileSystemWatcher.Start(FolderWatcherRoot);
+            _scheduler.Start();
         }
+
 
         protected override void OnStop()
         {
             log.Info("Service shutting down");
-            Scheduler.Shutdown();
-        }
-
-        void StartScheduler()
-        {
-            ISchedulerFactory schedFact = new StdSchedulerFactory();
-            Scheduler = schedFact.GetScheduler();
-            Scheduler.Start();
-        }
-
-        void StartCleanJob()
-        {
-            var hours = Int16.Parse(ConfigurationManager.AppSettings["CleanJobHours"]);
-            log.InfoFormat("Start Clean job. Execute once in {0} hours", hours);
-
-            IJobDetail job = JobBuilder.Create<Jobs.CleanJob>()
-                .WithIdentity("CleanJob", "group1")
-                .Build();
-
-            ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("CleanJobTrigger", "group1")
-                .StartNow()
-                .WithSimpleSchedule(x => x.WithIntervalInHours(hours).RepeatForever())
-                .Build();
-
-            Scheduler.ScheduleJob(job, trigger);
-        }
-
-
-        void StartFileProcessingJob()
-        {
-            var minutes = Int16.Parse(ConfigurationManager.AppSettings["FileProcessingJobMinutes"]);
-            log.InfoFormat("Start FileProcessing job. Execute once in {0} minutes", minutes);
-
-            IJobDetail job = JobBuilder.Create<Jobs.FileProcessingJob>()
-                .WithIdentity("FileProcessing", "group1")
-                .Build();
-
-            ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("FileProcessingTrigger", "group1")
-                .StartNow()
-                .WithSimpleSchedule(x => x.WithIntervalInMinutes(minutes).RepeatForever())
-                .Build();
-
-            Scheduler.ScheduleJob(job, trigger);
-        }
-
-
-        static void StartFileSystemWatcher(string folderRoot)
-        {
-            FileSystemWatcher = new FileSystemWatcher(folderRoot);
-            FileSystemWatcher.Filter = "*";
-            FileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
-            FileSystemWatcher.InternalBufferSize = 1024 * 64; //64k buffer
-            FileSystemWatcher.Created += new FileSystemEventHandler(OnCreated);
-            FileSystemWatcher.Error += new ErrorEventHandler(OnError);
-            FileSystemWatcher.IncludeSubdirectories = true;
-            FileSystemWatcher.EnableRaisingEvents = true;
-            log.InfoFormat("Watching directory: {0}", folderRoot);
-        }
-
-        static void OnCreated(object sender, FileSystemEventArgs e)
-        {
-            log.InfoFormat("New file ({0}): {1} | {2}", MethodInfo.GetCurrentMethod().Name, e.ChangeType, e.FullPath);
-            ThreadPool.QueueUserWorkItem(FileProcessor.Process, new {FileName=e.FullPath, Uri=UriApi});
-        }
-
-        static void OnError(object sender, ErrorEventArgs e)
-        {
-            log.ErrorFormat("({0}): {1}", MethodInfo.GetCurrentMethod().Name, e.GetException().Message);
-            if (e.GetException().GetType() == typeof(InternalBufferOverflowException))
-            {
-                //  This can happen if OS is reporting many file system events quickly 
-                //  and internal buffer of the  FileSystemWatcher is not large enough to handle this
-                //  rate of events. The InternalBufferOverflowException error informs the application
-                //  that some of the file system events are being lost.
-                log.InfoFormat(("The file system watcher experienced an internal buffer overflow: " + e.GetException().Message));
-            }
-        }
-
-
-        public static IFileProcessor BuildFileProcessor()
-        {
-            return new FileProcessor.FileProcessor();
+            _scheduler.Shutdown();
         }
 
 

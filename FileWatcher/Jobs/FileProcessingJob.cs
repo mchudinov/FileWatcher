@@ -1,7 +1,6 @@
 ﻿using System;
 using Quartz;
 using log4net;
-using System.Configuration;
 using FileWatcher.FileProcessor;
 using System.IO;
 using System.Linq;
