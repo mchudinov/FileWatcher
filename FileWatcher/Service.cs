@@ -19,6 +19,7 @@ namespace FileWatcher
 
         public Service() 
         {
+            ServiceName = "FileWatcher";
             FolderWatcherRoot = ConfigurationManager.AppSettings["FolderWatcherRoot"];
             if (!Directory.Exists(FolderWatcherRoot))
             {
