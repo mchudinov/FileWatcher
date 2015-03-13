@@ -42,15 +42,22 @@ namespace FileWatcher
 
         public void Start(string folderRoot)
         {
-            _fileSystemWatcher = new System.IO.FileSystemWatcher(folderRoot);
-            _fileSystemWatcher.Filter = "*";
-            _fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
-            _fileSystemWatcher.InternalBufferSize = 1024 * 64; //64k buffer
-            _fileSystemWatcher.Created += new FileSystemEventHandler(OnCreated);
-            _fileSystemWatcher.Error += new ErrorEventHandler(OnError);
-            _fileSystemWatcher.IncludeSubdirectories = true;
-            _fileSystemWatcher.EnableRaisingEvents = true;
-            log.InfoFormat("Watching directory: {0}", folderRoot);
+            try
+            {
+                _fileSystemWatcher = new System.IO.FileSystemWatcher(folderRoot);
+                _fileSystemWatcher.Filter = "*";
+                _fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+                _fileSystemWatcher.InternalBufferSize = 1024 * 64; //64k buffer
+                _fileSystemWatcher.Created += new FileSystemEventHandler(OnCreated);
+                _fileSystemWatcher.Error += new ErrorEventHandler(OnError);
+                _fileSystemWatcher.IncludeSubdirectories = true;
+                _fileSystemWatcher.EnableRaisingEvents = true;
+                log.InfoFormat("Watching directory: {0}", folderRoot);    
+            }
+            catch (System.Exception ex)
+            {
+                log.Error("FileSystemWatcher error. Folder:{0} Message: {1}", folderRoot, ex.Message);
+            }
         }
     }
 }
