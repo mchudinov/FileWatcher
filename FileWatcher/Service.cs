@@ -4,7 +4,6 @@ using System.ServiceProcess;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
-using FileWatcher.FileProcessor;
 
 namespace FileWatcher
 {
@@ -14,7 +13,7 @@ namespace FileWatcher
         public static string FolderWatcherRoot  { get; private set;}
         FileWatcher.Scheduler _scheduler;
         FileWatcher.FileSystemWatcher _fileSystemWatcher;
-        public static IFileProcessor FileProcessor {get; private set;}
+        public static FileWatcher.FileProcessor.IFileProcessor FileProcessor {get; private set;}
 
         public Service() 
         {

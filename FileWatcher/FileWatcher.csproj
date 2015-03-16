@@ -59,7 +59,7 @@
     <Compile Include="Jobs\FileProcessingJob.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Scheduler.cs" />
-    <Compile Include="FileWatcher.cs" />
+    <Compile Include="FileSystemWatcher.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
