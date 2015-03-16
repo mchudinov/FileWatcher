@@ -22,7 +22,7 @@ namespace FileWatcher
         static void OnCreated(object sender, FileSystemEventArgs e)
         {
             log.InfoFormat("New file ({0}): {1} | {2}", MethodInfo.GetCurrentMethod().Name, e.ChangeType, e.FullPath);
-            ThreadPool.QueueUserWorkItem(_fileProcessor.Process, new {FileName=e.FullPath, Uri=Service.UriApi});
+            ThreadPool.QueueUserWorkItem(_fileProcessor.Process, new {FileName=e.FullPath});
         }
 
 

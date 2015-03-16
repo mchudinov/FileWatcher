@@ -11,7 +11,6 @@ namespace FileWatcher
     public class Service : ServiceBase
     {
         static readonly ILog log = LogManager.GetLogger(typeof(FileWatcher.Service));
-        public static Uri UriApi { get; private set; }
         public static string FolderWatcherRoot  { get; private set;}
         FileWatcher.Scheduler _scheduler;
         FileWatcher.FileSystemWatcher _fileSystemWatcher;

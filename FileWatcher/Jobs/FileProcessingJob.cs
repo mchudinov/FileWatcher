@@ -18,7 +18,6 @@ namespace FileWatcher.Jobs
         public FileProcessingJob()
         {
             FolderWatcherRoot = Service.FolderWatcherRoot;
-            UriApi = Service.UriApi;
             FileProcessor = Service.FileProcessor;
         }
 
