@@ -19,7 +19,7 @@ namespace FileWatcher
         }
 
 
-        static void OnCreated(object sender, FileSystemEventArgs e)
+        static void OnChanged(object sender, FileSystemEventArgs e)
         {
             log.InfoFormat("New file ({0}): {1} | {2}", MethodInfo.GetCurrentMethod().Name, e.ChangeType, e.FullPath);
             ThreadPool.QueueUserWorkItem(_fileProcessor.Process, new {FileName=e.FullPath});
@@ -48,7 +48,7 @@ namespace FileWatcher
                 _fileSystemWatcher.Filter = "*";
                 _fileSystemWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
                 _fileSystemWatcher.InternalBufferSize = 1024 * 64; //64k buffer
-                _fileSystemWatcher.Created += new FileSystemEventHandler(OnCreated);
+                _fileSystemWatcher.Changed += new FileSystemEventHandler(OnChanged);
                 _fileSystemWatcher.Error += new ErrorEventHandler(OnError);
                 _fileSystemWatcher.IncludeSubdirectories = true;
                 _fileSystemWatcher.EnableRaisingEvents = true;
